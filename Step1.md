@@ -28,78 +28,69 @@
 
 
 # channels
-
-| カラム名       | データ型        | NULL | キー     | 初期値 | AUTO INCREMENT |
-| -------------- | --------------- | ---- | -------- | ------ | -------------- |
-| channel_id     | int             |      | PRIMARY  |        | YES            |
-| channel_name   | varchar(100)    |      |          |        |                |
-
-
-* ユニークキー制約：channel_nameカラムに設定
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| channel_id   | INT        | NO   | PRIMARY  |        | YES            |
+| channel_name | VARCHAR(100)| NO  | UNIQUE   |        |                |
 
 # programs
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| program_id | int | | PRIMARY | | YES |
-| title | varchar(100) | | INDEX | | |
-| description | text | YES | | | |
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| program_id   | INT        | NO   | PRIMARY  |        | YES            |
+| title        | VARCHAR(100)| NO  |          |        |                |
+| description  | TEXT       | YES  |          |        |                |
+| channel_id   | INT        | NO   | FOREIGN  |        |                |
+
+# broadcast_dates
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| broadcast_id | INT        | NO   | PRIMARY  |        | YES            |
+| start_time   | DATETIME   | NO   |          |        |                |
+| end_time     | DATETIME   | NO   |          |        |                |
+
+# program_broadcast_dates
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| pbd_id       | INT        | NO   | PRIMARY  |        | YES            |
+| program_id   | INT        | NO   | FOREIGN  |        |                |
+| broadcast_id | INT        | NO   | FOREIGN  |        |                |
 
 # genres
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| genre_id | int | | PRIMARY | | YES |
-| genre_name | varchar(100) | YES | | | |
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| genre_id     | INT        | NO   | PRIMARY  |        | YES            |
+| genre_name   | VARCHAR(100)| YES |          |        |                |
 
 # program_genres
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| program_id | int | |PRIMARY | | |
-| genre_id | int | |PRIMARY | | |
-###### 外部キー制約:
-- program_idに対して、programsテーブルのprogram_idから設定
-- genre_idに対して、genresテーブルのgenre_idから設定
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| program_id   | INT        | NO   | PRIMARY  |        |                |
+| genre_id     | INT        | NO   | PRIMARY  |        |                |
 
-# seasons
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| season_id | int | | PRIMARY | | YES |
-| program_id | int | | | | |
-| season_number | int | YES | | | |
-
-###### 外部キー制約：
-- program_idに対して、programsテーブルのprogram_idカラムから設定
 
 # episodes
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| episode_id | int | | PRIMARY | | YES |
-| season_id | int | YES | | | |
-| episode_number | int | YES | | | |
-| episode_title | varchar(255) | | | | |
-| episode_description | text | YES | | | |
-| video_time | time | | | | |
-
-###### 外部キー制約：
-- season_idに対して、seasonsテーブルのseason_idカラムから設定
-
-# Usersテーブル
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| user_id | int | | PRIMARY | | YES |
-| user_name | varchar(100) | | | | |
-| email | varchar(100) | | | | |
-| password | varchar(100) | | | | |
-* ユニークキー制約：emailカラムに設定
+| カラム名            | データ型      | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------------|--------------|------|----------|--------|----------------|
+| episode_id         | INT          | NO   | PRIMARY  |        | YES            |
+| program_id        | INT          | NO | FOREIGN  |        |                |
+| season_number       | INT          | YES  | FOREIGN  |        |                |
+| episode_number     | INT          | YES  |          |        |                |
+| episode_title      | VARCHAR(255) | NO  |          |        |                |
+| episode_description| TEXT         | YES  |          |        |                |
+| video_time         | TIME         | NO  |          |        |                |
 
 # episode_views
-| カラム名 | データ型 | NULL | キー | 初期値 | AUTO INCREMENT |
-|----------|----------|------|------|--------|----------------|
-| view_id | int | | PRIMARY | | YES |
-| channel_id | int | | INDEX | | |
-| episode_id | int | | | | |
-| broadcast_date | date | | | | |
-| view_count | int | | | 0 | |
-###### 外部キー制約：
-- channel_idに対して、channelsテーブルのchannel_idカラムから設定
-- episode_idに対して、episodesテーブルのepisode_idカラムから設定
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| view_id      | INT        | NO   | PRIMARY  |        | YES            |
+| episode_id   | INT        | NO   | FOREIGN  |        |                |
+| pbd_id       | INT        | NO   | FOREIGN  |        |                |
+| view_count   | INT        | YES  |          | 0      |                |
 
+# users
+| カラム名      | データ型    | NULL | キー     | 初期値 | AUTO INCREMENT |
+|--------------|------------|------|----------|--------|----------------|
+| user_id      | INT        | NO   | PRIMARY  |        | YES            |
+| user_name    | VARCHAR(100)| NO  |          |        |                |
+| email        | VARCHAR(100)| NO  | INDEX    |        |                |
+| password     | VARCHAR(100)| NO  |          |        |                |
